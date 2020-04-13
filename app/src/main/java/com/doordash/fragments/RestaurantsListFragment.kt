@@ -30,9 +30,6 @@ class RestaurantsListFragment : Fragment(), OnRestaurantClickListener {
         super.onActivityCreated(savedInstanceState)
         restaurantsAdapter = RestaurantsAdapter(onRestaurantClickListener =  this)
 
-        btn.setOnClickListener {
-            viewModel.getRestaurants()
-        }
         activity?.let {
             rvRestaurants.apply {
                 adapter = restaurantsAdapter
