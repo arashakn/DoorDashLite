@@ -13,9 +13,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.doordash.R
 import com.doordash.adapters.OnRestaurantClickListener
 import com.doordash.adapters.RestaurantsAdapter
+import com.doordash.utils.EspressoIdlingResource
 import kotlinx.android.synthetic.main.images_list_fragment.*
 
 class RestaurantsListFragment : Fragment(), OnRestaurantClickListener {
+
     private lateinit var viewModel: RestaurantsListViewModel
     private lateinit var restaurantsAdapter :RestaurantsAdapter
 
@@ -47,8 +49,12 @@ class RestaurantsListFragment : Fragment(), OnRestaurantClickListener {
     }
 
     private fun observeViewModels(){
+        EspressoIdlingResource.increment()
         viewModel.restaurants.observe(viewLifecycleOwner,  Observer{
-            restaurantsAdapter.updateRestaurants(it)
+            if(it.isNullOrEmpty()) {
+                restaurantsAdapter.updateRestaurants(it)
+                EspressoIdlingResource.increment()
+            }
         }
         )
     }

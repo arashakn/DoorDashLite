@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 
 import com.doordash.R
+import kotlinx.android.synthetic.main.fragment_restaurant_detailed.*
 
 
 class RestaurantDetailedFragment : Fragment() {
@@ -36,9 +37,8 @@ class RestaurantDetailedFragment : Fragment() {
         activity?.let {
             viewModel = ViewModelProvider(it).get(RestaurantsListViewModel::class.java)
             viewModel.selectedRestaurant.observe(viewLifecycleOwner , Observer {
-                //todo
+                rvRestaurantTitle.text = it.name
             })
-            it.title = name
         }
 
     }
