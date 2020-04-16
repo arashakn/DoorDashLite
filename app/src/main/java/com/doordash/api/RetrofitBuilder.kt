@@ -12,11 +12,15 @@ import java.util.concurrent.TimeUnit
 object RetrofitBuilder {
     const val BASE_URL = "https://api.doordash.com"
     const val cacheSize = (5 * 1024 * 1024).toLong()
-    private val myCache = Cache(AppApplication.applicationContext().cacheDir, cacheSize) //Caches HTTP and HTTPS responses to the filesystem so they may be reused, saving time and bandwidth.
+    private val myCache = Cache(
+        AppApplication.applicationContext().cacheDir,
+        cacheSize
+    ) //Caches HTTP and HTTPS responses to the filesystem so they may be reused, saving time and bandwidth.
     private val httpClient: OkHttpClient // http client
 
     init {
-        val httpLoggingInterceptor = HttpLoggingInterceptor() //OkHttp interceptor which logs HTTP request and response data.
+        val httpLoggingInterceptor =
+            HttpLoggingInterceptor() //OkHttp interceptor which logs HTTP request and response data.
         httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         httpClient = OkHttpClient.Builder()
             .addInterceptor(httpLoggingInterceptor)
@@ -44,8 +48,7 @@ object RetrofitBuilder {
             .addConverterFactory(GsonConverterFactory.create())
     }
 
-    val restaurantsAPI : RestaurantsAPI by lazy {
-        retrofitBuilder.build().
-                create(RestaurantsAPI::class.java)
+    val restaurantsAPI: RestaurantsAPI by lazy {
+        retrofitBuilder.build().create(RestaurantsAPI::class.java)
     }
 }

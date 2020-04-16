@@ -1,5 +1,7 @@
 package com.doordash.adapters
 
+import android.app.Activity
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,10 +15,23 @@ import java.lang.Exception
 
 class RestaurantsAdapter(
     val restaurants: ArrayList<Restaurant> = ArrayList(),
-    val onRestaurantClickListener: OnRestaurantClickListener
+    val onRestaurantClickListener: OnRestaurantClickListener,
+    context: Activity?
 ) : RecyclerView.Adapter<RestaurantsAdapter.RestaurantsViewHolder>() {
 
     private val picasso = Picasso.get()
+    val width: Int
+    val height: Int
+
+    init {
+        val displayMetrics = DisplayMetrics()
+        context?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
+        /**
+         * get the width of screen in order to resize the images accordingly
+         */
+        height = (displayMetrics.heightPixels / 5)
+        width = height
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RestaurantsViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -42,7 +57,7 @@ class RestaurantsAdapter(
                 picasso.load(it)
                     .error(R.drawable.ic_image_gray)
                     .placeholder(R.drawable.ic_image_gray)
-                    .resize(100, 100)
+                    .resize(width, height)
                     .into(ivRestaurant, object : Callback {
                         override fun onSuccess() {
                         }
@@ -68,5 +83,5 @@ class RestaurantsAdapter(
 }
 
 interface OnRestaurantClickListener {
-    public fun onRestaurantClick(position: Int)
+    fun onRestaurantClick(position: Int)
 }
