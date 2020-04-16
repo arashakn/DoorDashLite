@@ -40,12 +40,12 @@ class RestaurantsListFragment : Fragment(), OnRestaurantClickListener {
                 setHasFixedSize(true)
                 addItemDecoration(
                     DividerItemDecoration(
-                        activity,
+                        it,
                         DividerItemDecoration.VERTICAL
                     )
                 )
             }
-            viewModel = ViewModelProvider(it).get(RestaurantsListViewModel::class.java)
+            viewModel = ViewModelProvider(it).get(RestaurantsListViewModel::class.java) ////makes the ViewModel scoop to activity rather than fragment
             observeViewModels()
         }
     }
