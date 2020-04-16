@@ -30,7 +30,7 @@ class RestaurantsListFragmentTest {
 
     @get : Rule
     val activityRule = ActivityScenarioRule(MainActivity::class.java)
-     val LIST_ITEM_IN_TEST = 2
+     val LIST_ITEM_IN_TEST = 0
 
     @Before
     fun registerIdlingResource() {

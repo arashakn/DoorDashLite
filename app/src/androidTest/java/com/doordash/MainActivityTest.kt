@@ -12,11 +12,9 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4ClassRunner::class)
 class MainActivityTest {
-
     @Test
     fun test_activity_inView() {
         val activityScenario = ActivityScenario.launch(MainActivity::class.java) // creating an activity in this test function
         onView(withId(R.id.fragmentContainerView)).check(matches(isDisplayed())) //check fragment is visible
     }
-
 }

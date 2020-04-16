@@ -51,9 +51,9 @@ class RestaurantsListFragment : Fragment(), OnRestaurantClickListener {
     private fun observeViewModels(){
         EspressoIdlingResource.increment()
         viewModel.restaurants.observe(viewLifecycleOwner,  Observer{
-            if(it.isNullOrEmpty()) {
+            if(!it.isNullOrEmpty()) {
                 restaurantsAdapter.updateRestaurants(it)
-                EspressoIdlingResource.increment()
+                EspressoIdlingResource.decrement()
             }
         }
         )
