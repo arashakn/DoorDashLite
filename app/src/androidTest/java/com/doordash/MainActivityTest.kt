@@ -1,6 +1,5 @@
 package com.doordash
 
-import android.app.Activity
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed

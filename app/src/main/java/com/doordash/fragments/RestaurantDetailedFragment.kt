@@ -7,13 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-
 import com.doordash.R
 import kotlinx.android.synthetic.main.fragment_restaurant_detailed.*
 
 
 class RestaurantDetailedFragment : Fragment() {
-    lateinit var name : String
+    lateinit var name: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,7 +21,7 @@ class RestaurantDetailedFragment : Fragment() {
         }
     }
 
-    lateinit var viewModel :RestaurantsListViewModel
+    lateinit var viewModel: RestaurantsListViewModel
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,13 +32,11 @@ class RestaurantDetailedFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-
         activity?.let {
             viewModel = ViewModelProvider(it).get(RestaurantsListViewModel::class.java)
-            viewModel.selectedRestaurant.observe(viewLifecycleOwner , Observer {
+            viewModel.selectedRestaurant.observe(viewLifecycleOwner, Observer {
                 rvRestaurantTitle.text = it.name
             })
         }
-
     }
 }
