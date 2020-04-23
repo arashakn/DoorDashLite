@@ -33,4 +33,5 @@ class RestaurantsListViewModel : ViewModel() {
             error.value = true
         }
     }
+
 }

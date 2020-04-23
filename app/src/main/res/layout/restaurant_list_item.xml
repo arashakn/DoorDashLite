@@ -3,8 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="140dp"
     android:padding="10dp">
+    <Button
+        android:text="Fav Button"
+        android:id="@+id/btnFav"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
     <ImageView
+        android:layout_toEndOf="@+id/btnFav"
         android:id="@+id/ivRestaurant"
         android:layout_width="140dp"
         android:layout_height="match_parent"
@@ -40,4 +46,5 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true" />
+
 </RelativeLayout>

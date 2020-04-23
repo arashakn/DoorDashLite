@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.doordash.R
 import com.doordash.models.Restaurant
+import com.doordash.repository.MainRepository
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.restaurant_list_item.view.*
@@ -22,6 +23,8 @@ class RestaurantsAdapter(
     private val picasso = Picasso.get()
     val width: Int
     val height: Int
+    val favList: ArrayList<String>
+
 
     init {
         val displayMetrics = DisplayMetrics()
@@ -31,6 +34,7 @@ class RestaurantsAdapter(
          */
         height = (displayMetrics.heightPixels / 5)
         width = height
+        favList = MainRepository.getArrayListOfFav()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RestaurantsViewHolder {
@@ -72,6 +76,27 @@ class RestaurantsAdapter(
                 onRestaurantClickListener.onRestaurantClick(adapterPosition)
             }
             view.tvStatus.text = restaurant.status
+            val id = restaurant.id.toString()
+            val fav = favList
+            var favCopy = ""
+            if(fav.contains(id)){
+                favCopy = "remove from Fav"
+            }else{
+                favCopy = "add to Fav"
+            }
+
+//            val favCopy = if (favList.contains(restaurant.id)) "remove from Fav" else "add to Fav"
+            view.btnFav.text = favCopy
+            view.btnFav.setOnClickListener {
+                if (favList.contains(restaurant.id.toString())) { // removing from Fav.
+                    favList.remove(restaurant.id.toString())
+                    view.btnFav.text = "add to Fav"
+                } else { //adding to Fav.
+                    favList.add(restaurant.id.toString())
+                    view.btnFav.text = "remove from Fav"
+                }
+                MainRepository.saveArrayList(favList)
+            }
         }
     }
 
