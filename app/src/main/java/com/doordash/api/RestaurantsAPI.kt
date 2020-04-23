@@ -12,4 +12,7 @@ import retrofit2.http.Query
 interface RestaurantsAPI {
     @GET("/v2/restaurant/")
     suspend fun getRestaurants( @Query("lng") lng : Float, @Query("lat") lat : Float, @Query("offset") offset : Int, @Query("limit") limit : Int) : ArrayList<Restaurant>
+
+    @GET("/v2/restaurant/{id}")
+    suspend fun getRestaurantInfo(@Query("id") id : Long)
 }
