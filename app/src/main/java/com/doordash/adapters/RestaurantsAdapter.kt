@@ -5,6 +5,8 @@ import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import com.doordash.R
 import com.doordash.models.Restaurant
@@ -18,12 +20,13 @@ class RestaurantsAdapter(
     val restaurants: ArrayList<Restaurant> = ArrayList(),
     val onRestaurantClickListener: OnRestaurantClickListener,
     context: Activity?
-) : RecyclerView.Adapter<RestaurantsAdapter.RestaurantsViewHolder>() {
+) : RecyclerView.Adapter<RestaurantsAdapter.RestaurantsViewHolder>(), Filterable {
 
     private val picasso = Picasso.get()
     val width: Int
     val height: Int
     val favList: ArrayList<String>
+    val restaurantsAll: ArrayList<Restaurant>
 
 
     init {
@@ -35,6 +38,7 @@ class RestaurantsAdapter(
         height = (displayMetrics.heightPixels / 5)
         width = height
         favList = MainRepository.getArrayListOfFav()
+        restaurantsAll = ArrayList(restaurants)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RestaurantsViewHolder {
@@ -79,9 +83,9 @@ class RestaurantsAdapter(
             val id = restaurant.id.toString()
             val fav = favList
             var favCopy = ""
-            if(fav.contains(id)){
+            if (fav.contains(id)) {
                 favCopy = "remove from Fav"
-            }else{
+            } else {
                 favCopy = "add to Fav"
             }
 
@@ -103,7 +107,40 @@ class RestaurantsAdapter(
     fun updateRestaurants(list: ArrayList<Restaurant>) {
         restaurants.clear()
         restaurants.addAll(list)
+        restaurantsAll.clear()
+        restaurantsAll.addAll(list)
         notifyDataSetChanged()
+    }
+
+    override fun getFilter(): Filter {
+        return filt
+    }
+
+    val filt = object : Filter() {
+        override fun performFiltering(constraint: CharSequence?): FilterResults {// run background thread
+            val filterList = ArrayList<Restaurant>()
+            if (constraint.isNullOrEmpty()) {
+                filterList.addAll(restaurantsAll)
+            } else{
+                for(res in restaurantsAll){
+                    if(res.description.toLowerCase().contains(constraint)){
+                        filterList.add(res)
+                    }
+                }
+            }
+            val filterResult = FilterResults()
+            filterResult.values = filterList
+            return filterResult
+        }
+
+        override fun publishResults(
+            constraint: CharSequence?,
+            results: FilterResults?
+        ) {//runs on Ui thread
+          restaurants.clear()
+            restaurants.addAll(results?.values as Collection<Restaurant>)
+            notifyDataSetChanged()
+        }
     }
 }
 

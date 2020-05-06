@@ -102,6 +102,7 @@ class RestaurantsListFragment : Fragment(), OnRestaurantClickListener {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
+                restaurantsAdapter.filt.filter(newText)
                 return false
             }
 
