@@ -2,6 +2,9 @@ package com.doordash
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.widget.SearchView
 import com.doordash.fragments.RestaurantsListFragment
 
 class MainActivity : AppCompatActivity() {
@@ -13,4 +16,5 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.beginTransaction().add(R.id.fragmentContainerView,RestaurantsListFragment()).commitAllowingStateLoss()
         }
     }
+
 }

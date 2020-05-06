@@ -1,9 +1,8 @@
 package com.doordash.fragments
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -20,6 +19,11 @@ class RestaurantsListFragment : Fragment(), OnRestaurantClickListener {
 
     private lateinit var viewModel: RestaurantsListViewModel
     private lateinit var restaurantsAdapter: RestaurantsAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true);
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,7 +49,8 @@ class RestaurantsListFragment : Fragment(), OnRestaurantClickListener {
                     )
                 )
             }
-            viewModel = ViewModelProvider(it).get(RestaurantsListViewModel::class.java) ////makes the ViewModel scoop to activity rather than fragment
+            viewModel =
+                ViewModelProvider(it).get(RestaurantsListViewModel::class.java) ////makes the ViewModel scoop to activity rather than fragment
             observeViewModels()
         }
     }
@@ -84,5 +89,23 @@ class RestaurantsListFragment : Fragment(), OnRestaurantClickListener {
                 .replace(R.id.fragmentContainerView, fragment).addToBackStack(null)
                 .commitAllowingStateLoss()
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+
+        activity?.menuInflater?.inflate(R.menu.main_menu, menu)
+        val item = menu.findItem(R.id.search)
+        val searchView = item.actionView as SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+
+        })
+        super.onCreateOptionsMenu(menu, inflater)
     }
 }
