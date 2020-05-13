@@ -1,7 +1,9 @@
 package com.doordash.api
 
 import com.doordash.models.Restaurant
+import io.reactivex.Single
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 /**
@@ -15,4 +17,10 @@ interface RestaurantsAPI {
 
     @GET("/v2/restaurant/{id}")
     suspend fun getRestaurantInfo(@Query("id") id : Long)
+
+    @GET("/v2/restaurant/")
+    fun getRestaurantsRx( @Query("lng") lng : Float, @Query("lat") lat : Float, @Query("offset") offset : Int, @Query("limit") limit : Int) : Single<ArrayList<Restaurant>>
+
+    @GET("/v2/restaurant/{id}") // path parameters
+    fun getRestaurantInfoRx(@Path("id") id : Long) : Single<Restaurant>
 }

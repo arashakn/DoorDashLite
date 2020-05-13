@@ -1,8 +1,14 @@
 package com.doordash.fragments
 
 import androidx.lifecycle.*
+import com.doordash.api.RetrofitBuilder
 import com.doordash.models.Restaurant
 import com.doordash.repository.MainRepository
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.observers.DisposableSingleObserver
+import io.reactivex.schedulers.Schedulers
+import java.lang.RuntimeException
 
 class RestaurantsListViewModel : ViewModel() {
     val selectedRestaurant = MutableLiveData<Restaurant>()
@@ -11,6 +17,7 @@ class RestaurantsListViewModel : ViewModel() {
     private var curLat = 37.422740F
     private val offSet = 0
     private val limit = 50
+    private val compositeDisposable  = CompositeDisposable ()
 
     /**
      * Utilizing new API of coroutines for live data using livedata builder function
@@ -34,4 +41,51 @@ class RestaurantsListViewModel : ViewModel() {
         }
     }
 
+    fun fetchRestaurant(id : Long){
+        error.value = false
+        try {
+            val disposable = RetrofitBuilder.restaurantsAPI.getRestaurantInfoRx(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object  : DisposableSingleObserver<Restaurant>(){
+                    override fun onSuccess(value: Restaurant?) {
+                        value?.let {
+                            selectedRestaurant.value = it
+                        }
+                    }
+                    override fun onError(e: Throwable?) {
+                        error.value = true
+                    }
+                })
+            compositeDisposable.add(disposable)
+        }catch (e : RuntimeException){
+            error.value = true
+        }
+    }
+    fun fetchAllRestaurant(){
+        error.value = false
+        try {
+            val disposable = RetrofitBuilder.restaurantsAPI.getRestaurantsRx(curLng, curLat, offSet, limit)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object  : DisposableSingleObserver<ArrayList<Restaurant>>(){
+                    override fun onSuccess(value: ArrayList<Restaurant>?) {
+                        value?.let {
+                            println(it.size)
+                        }
+                    }
+                    override fun onError(e: Throwable?) {
+                        error.value = true
+                    }
+                })
+            compositeDisposable.add(disposable)
+        }catch (e : RuntimeException){
+            error.value = true
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.clear()
+    }
 }

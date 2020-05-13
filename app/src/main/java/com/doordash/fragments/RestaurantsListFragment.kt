@@ -46,6 +46,7 @@ class RestaurantsListFragment : Fragment(), OnRestaurantClickListener {
                 )
             }
             viewModel = ViewModelProvider(it).get(RestaurantsListViewModel::class.java) ////makes the ViewModel scoop to activity rather than fragment
+            //viewModel.fetchAllRestaurant()
             observeViewModels()
         }
     }
@@ -62,8 +63,8 @@ class RestaurantsListFragment : Fragment(), OnRestaurantClickListener {
         viewModel.error.observe(viewLifecycleOwner, Observer {
             it?.let {
                 if (it) {
-                    Toast.makeText(activity, "Network Error!", Toast.LENGTH_LONG)
-                        .show() // In case of network error, a message will be displayed to the user
+//                    Toast.makeText(activity, "Network Error!", Toast.LENGTH_LONG)
+//                        .show() // In case of network error, a message will be displayed to the user
                 }
             }
         })
@@ -75,7 +76,9 @@ class RestaurantsListFragment : Fragment(), OnRestaurantClickListener {
             viewModel.selectedRestaurant.value = restaurant
             val bundle = Bundle()
             bundle.apply {
-                putString("name", restaurant.name)
+                putString(NAME, restaurant.name)
+                putLong(REST_ID, restaurant.id)
+
             }
             val fragment = RestaurantDetailedFragment().apply {
                 arguments = bundle
@@ -85,4 +88,9 @@ class RestaurantsListFragment : Fragment(), OnRestaurantClickListener {
                 .commitAllowingStateLoss()
         }
     }
+
+  companion object {
+      val NAME = "NAME"
+      val REST_ID = "REST_ID"
+  }
 }

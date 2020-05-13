@@ -13,11 +13,13 @@ import kotlinx.android.synthetic.main.fragment_restaurant_detailed.*
 
 class RestaurantDetailedFragment : Fragment() {
     lateinit var name: String
+    var retID : Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            name = it.getString("name") ?: ""
+            name = it.getString(RestaurantsListFragment.NAME) ?: ""
+            retID = it.getLong(RestaurantsListFragment.REST_ID)
         }
     }
 
@@ -34,9 +36,14 @@ class RestaurantDetailedFragment : Fragment() {
 
         activity?.let {
             viewModel = ViewModelProvider(it).get(RestaurantsListViewModel::class.java)
+            if(retID >0 ){
+                viewModel.fetchRestaurant(retID)
+            }
             viewModel.selectedRestaurant.observe(viewLifecycleOwner, Observer {
                 rvRestaurantTitle.text = it.name
             })
         }
     }
+
+
 }
