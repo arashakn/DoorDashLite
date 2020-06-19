@@ -11,10 +11,13 @@ object MainRepository {
 
     private var PRIVATE_MODE = 0
     private val PREF_NAME = "fav_list"
+    private val PREF_USER_INFO = "user_info"
     val sharedPref: SharedPreferences?
     val editor : SharedPreferences.Editor ?
     val listOfFav : ArrayList<String>
     val SP_KEY = "FAV_LIST"
+    val SP_USER_INFO = "USER_INFO"
+
 
     init {
         sharedPref= AppApplication.applicationContext()?.getSharedPreferences(PREF_NAME, PRIVATE_MODE)
@@ -39,11 +42,23 @@ object MainRepository {
         return gson.fromJson(json, type)
     }
 
+
+
     fun saveArrayList(list: ArrayList<String>, key: String? = SP_KEY) {
         val editor = sharedPref?.edit()
         val gson = Gson()
         val json = gson.toJson(list)
         editor?.putString(key, json)
         editor?.apply() // This line is IMPORTANT !!!
+    }
+
+    fun saveToken(token : String ,key: String? = SP_USER_INFO){
+        val editor = sharedPref?.edit()
+        editor?.putString(SP_USER_INFO, token)
+        editor?.apply()
+    }
+    fun getToken(key: String? = SP_USER_INFO) : String?{
+        val userInfo = sharedPref?.getString(key, null)
+        return userInfo
     }
 }
